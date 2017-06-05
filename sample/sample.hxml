@@ -1,0 +1,4 @@
+-cp .
+-cp ../src
+-main Main
+--interp
