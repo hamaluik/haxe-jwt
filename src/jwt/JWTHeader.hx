@@ -1,13 +1,16 @@
 package jwt;
 
+/**
+ Contents of the JWT header
+ */
 typedef JWTHeader = {
     /**
-     *  Signature algorithm
+     Signature algorithm
      */
     var alg:JWTAlgorithm;
 
     /**
-     *  Token type
+     Token type
      */
     var typ:JWTType;
 };

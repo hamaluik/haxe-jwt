@@ -1,6 +1,10 @@
 # haxe-jwt
 
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg?style=flat-square)](https://raw.githubusercontent.com/FuzzyWuzzie/haxe-jwt/master/LICENSE)
+
 A [JSON Web Token](https://jwt.io/#debugger) library for native [Haxe](http://haxe.org/).
+
+API docs are available here: [https://fuzzywuzzie.github.io/haxe-jwt/](https://fuzzywuzzie.github.io/haxe-jwt/).
 
 ## Features
 
@@ -48,5 +52,13 @@ switch(result) {
 
 ```
 
-## Changelog
+## Change Log
+All notable changes to this project will be documented in this file.
 
+The format is based on [Keep a Changelog](http://keepachangelog.com/)
+and this project adheres to [Semantic Versioning](http://semver.org/).
+
+### 1.0.0
+#### Added
+- HMACSHA256 token generation & signing
+- HMACSHA256 token verification & decoding

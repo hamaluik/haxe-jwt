@@ -1,0 +1,12 @@
+-cp src
+-D docgen
+
+jwt.JWT
+
+--each
+
+--interp
+-xml dox/haxe.xml
+
+--next
+-cmd haxelib run dox -i dox -o docs --title "JWT" --toplevel-package "jwt" -D version "1.0.0" -D source-path "https://github.com/FuzzyWuzzie/haxe-jwt/blob/master/src"

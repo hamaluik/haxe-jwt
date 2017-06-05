@@ -6,14 +6,24 @@ import haxe.crypto.Hmac;
 import haxe.io.Bytes;
 
 /**
- *  The result of a call to JWT.verify.
- *  If the token is valid and the signatures match, it contains the payload.
+ The result of a call to JWT.verify.
+ If the token is valid and the signatures match, it contains the payload.
  */
 enum JWTResult<T> {
+    /**
+     The token signature is valid, included is the payload
+     */
     Valid(payload:T);
+
+    /**
+     The token was malformed or the signature was invalid
+     */
     Invalid;
 }
 
+/**
+ All JWT functionality is implemented here (namely signing and verifying tokens)
+ */
 class JWT {
     private function new(){}
 
@@ -26,11 +36,11 @@ class JWT {
     }
 
     /**
-     *  Creates a signed JWT
-     *  @param header - header information. If null, will default to HS256 encryption
-     *  @param payload - The data to include
-     *  @param secret - The secret to generate the signature with
-     *  @return String
+     Creates a signed JWT
+     @param header - header information. If null, will default to HS256 encryption
+     @param payload - The data to include
+     @param secret - The secret to generate the signature with
+     @return String
      */
     public static function sign<T>(payload:T, secret:String, ?header:JWTHeader):String {
         if(header == null) {
@@ -59,10 +69,10 @@ class JWT {
     // TODO: add @:generic when https://github.com/HaxeFoundation/haxe/issues/3697 is sorted
 
     /**
-     *  Verifies a JWT and returns the payload if successful
-     *  @param jwt - the token to examine
-     *  @param secret - the secret to compare it with
-     *  @return JWTResult<T>
+     Verifies a JWT and returns the payload if successful
+     @param jwt - the token to examine
+     @param secret - the secret to compare it with
+     @return JWTResult<T>
      */
     public static function verify<T>(jwt:String, secret:String):JWTResult<T> {
         var parts:Array<String> = jwt.split(".");
