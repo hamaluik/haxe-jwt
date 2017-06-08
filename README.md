@@ -58,6 +58,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+### 1.1.0
+#### Added
+- A `replacer` parameter to `JWT.sign`, allowing custom replacers for JSON encoding (through `haxe.Json.encode`).
+
+#### Fixed
+- Actually fixed `haxelib.json` `classpath` :sweat_smile:
+
+### 1.0.1
+#### Changed
+- Attempted to fix `haxelib.json` `classpath` so library can _actually_ be used.
+
 ### 1.0.0
 #### Added
 - HMACSHA256 token generation & signing
