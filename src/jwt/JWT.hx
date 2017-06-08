@@ -9,7 +9,7 @@ import haxe.io.Bytes;
  The result of a call to JWT.verify.
  If the token is valid and the signatures match, it contains the payload.
  */
-enum JWTResult<T> {
+enum JWTResult<T:Dynamic> {
     /**
      The token signature is valid, included is the payload
      */
@@ -39,10 +39,14 @@ class JWT {
      Creates a signed JWT
      @param header - header information. If null, will default to HS256 encryption
      @param payload - The data to include
+     @param replacer -  If `replacer` is given and is not null, it is used to retrieve the
+	                    actual payload to be encoded. The `replacer` function takes two parameters,
+	                    the key and the value being encoded. Initial key value is an empty string.
+     @see <http://api.haxe.org/haxe/Json.html#stringify>
      @param secret - The secret to generate the signature with
      @return String
      */
-    public static function sign<T>(payload:T, secret:String, ?header:JWTHeader):String {
+    public static function sign(payload:Dynamic, secret:String, ?replacer:Dynamic->Dynamic->Dynamic, ?header:JWTHeader):String {
         if(header == null) {
             header = {
                 alg: JWTAlgorithm.HS256,
@@ -54,7 +58,7 @@ class JWT {
         header.alg = JWTAlgorithm.HS256;
 
         var h:String = Json.stringify(header);
-        var p:String = Json.stringify(payload);
+        var p:String = Json.stringify(payload, replacer);
         var hb64:String = Base64.encode(Bytes.ofString(h));
         var pb64:String = Base64.encode(Bytes.ofString(p));
         var sb:Bytes = switch(header.alg) {
@@ -74,7 +78,7 @@ class JWT {
      @param secret - the secret to compare it with
      @return JWTResult<T>
      */
-    public static function verify<T>(jwt:String, secret:String):JWTResult<T> {
+    public static function verify<T:Dynamic>(jwt:String, secret:String):JWTResult<T> {
         var parts:Array<String> = jwt.split(".");
         if(parts.length != 3) return JWTResult.Invalid;
 

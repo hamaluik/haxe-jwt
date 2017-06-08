@@ -1,12 +1,12 @@
 {
     "name": "jwt",
+    "classPath": "src",
     "url" : "https://github.com/FuzzyWuzzie/haxe-jwt",
     "license": "Apache",
     "tags": ["cross", "utility", "web"],
     "description": "A JSON Web Token library for native Haxe.",
-    "version": "1.0.1",
-    "releasenote": "Fixed classpath in haxelib release",
+    "version": "1.1.0",
+    "releasenote": "Added `replacer` parameter for signing objects",
     "contributors": ["FuzzyWuzzie"],
-    "classpath": "src",
     "dependencies": { }
 }
