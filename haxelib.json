@@ -4,8 +4,9 @@
     "license": "Apache",
     "tags": ["cross", "utility", "web"],
     "description": "A JSON Web Token library for native Haxe.",
-    "version": "1.0.0",
-    "releasenote": "Initial release, barebones but working.",
-    "contributors": ["Kenton Hamaluik"],
+    "version": "1.0.1",
+    "releasenote": "Fixed classpath in haxelib release",
+    "contributors": ["FuzzyWuzzie"],
+    "classpath": "src",
     "dependencies": { }
 }
