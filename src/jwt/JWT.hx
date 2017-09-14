@@ -5,6 +5,8 @@ import haxe.crypto.Base64;
 import haxe.crypto.Hmac;
 import haxe.io.Bytes;
 
+using StringTools;
+
 /**
  The result of a call to JWT.verify.
  If the token is valid and the signatures match, it contains the payload.
