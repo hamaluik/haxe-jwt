@@ -4,8 +4,8 @@
     "license": "Apache",
     "tags": ["cross", "utility", "web"],
     "description": "A JSON Web Token library for native Haxe.",
-    "version": "1.0.0",
-    "releasenote": "Initial release, barebones but working.",
+    "version": "1.2.0",
+    "releasenote": "Switched to the official base64url encoding instead of base64",
     "contributors": ["FuzzyWuzzie"],
     "dependencies": { }
 }
