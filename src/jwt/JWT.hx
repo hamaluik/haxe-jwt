@@ -5,6 +5,8 @@ import haxe.crypto.Base64;
 import haxe.crypto.Hmac;
 import haxe.io.Bytes;
 
+using StringTools;
+
 /**
  The result of a call to JWT.verify.
  If the token is valid and the signatures match, it contains the payload.
@@ -26,6 +28,23 @@ enum JWTResult<T> {
  */
 class JWT {
     private function new(){}
+
+    private static function base64url_encode(b:Bytes):String {
+        var b64:String = Base64.encode(b);
+        return b64.replace('+', '-').replace('/', '_').replace('=', '');
+    }
+
+    private static function base64url_decode(s:String):Bytes {
+        var s64 = s.replace('-', '+').replace('_', '/');
+        s64 += switch(s64.length % 4) {
+            case 0: '';
+            case 1: '===';
+            case 2: '==';
+            case 3: '=';
+            case _: throw 'Illegal base64url string!';
+        }
+        return Base64.decode(s64);
+    }
 
     private static function signature(alg:JWTAlgorithm, body:String, secret:String):Bytes {
         if(alg != JWTAlgorithm.HS256) throw "HS256 is the only supported algorithm for now!";
@@ -55,13 +74,13 @@ class JWT {
 
         var h:String = Json.stringify(header);
         var p:String = Json.stringify(payload);
-        var hb64:String = Base64.encode(Bytes.ofString(h));
-        var pb64:String = Base64.encode(Bytes.ofString(p));
+        var hb64:String = base64url_encode(Bytes.ofString(h));
+        var pb64:String = base64url_encode(Bytes.ofString(p));
         var sb:Bytes = switch(header.alg) {
             case JWTAlgorithm.HS256: signature(header.alg, hb64 + "." + pb64, secret);
             default: throw 'The ${cast(header.alg)} algorithm isn\'t supported yet!';
         }
-        var s:String = Base64.encode(sb);
+        var s:String = base64url_encode(sb);
 
         return hb64 + "." + pb64 + "." + s;
     }
@@ -78,14 +97,14 @@ class JWT {
         var parts:Array<String> = jwt.split(".");
         if(parts.length != 3) return JWTResult.Invalid;
 
-        var h:String = Base64.decode(parts[0]).toString();
+        var h:String = base64url_decode(parts[0]).toString();
         var header:JWTHeader = cast(Json.parse(h));
         if(header.alg != JWTAlgorithm.HS256) throw 'The ${cast(header.alg)} algorithm isn\'t supported yet!';
 
-        var p:String = Base64.decode(parts[1]).toString();
+        var p:String = base64url_decode(parts[1]).toString();
 
         // verify the signatures match!
-        var sb:Bytes = Base64.decode(parts[2]);
+        var sb:Bytes = base64url_decode(parts[2]);
         var testSig:Bytes = signature(header.alg, parts[0] + "." + parts[1], secret);
         if(sb.compare(testSig) != 0) return JWTResult.Invalid;
 
