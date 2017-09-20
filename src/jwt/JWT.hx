@@ -18,9 +18,14 @@ enum JWTResult<T:Dynamic> {
     Valid(payload:T);
 
     /**
-     The token was malformed or the signature was invalid
+     The signature was invalid
      */
-    Invalid;
+    Invalid(payload:T);
+
+    /**
+     *  The token was malformed
+     */
+    Malformed;
 }
 
 /**
@@ -99,7 +104,7 @@ class JWT {
      */
     public static function verify<T:Dynamic>(jwt:String, secret:String):JWTResult<T> {
         var parts:Array<String> = jwt.split(".");
-        if(parts.length != 3) return JWTResult.Invalid;
+        if(parts.length != 3) return JWTResult.Malformed;
 
         var h:String = base64url_decode(parts[0]).toString();
         var header:JWTHeader = cast(Json.parse(h));
@@ -110,10 +115,21 @@ class JWT {
         // verify the signatures match!
         var sb:Bytes = base64url_decode(parts[2]);
         var testSig:Bytes = signature(header.alg, parts[0] + "." + parts[1], secret);
-        if(sb.compare(testSig) != 0) return JWTResult.Invalid;
+        if(sb.compare(testSig) != 0) return JWTResult.Invalid(Json.parse(p));
 
         // TODO: validate public claims (iss, sub, exp, etc)
 
         return JWTResult.Valid(Json.parse(p));
+    }
+
+    /**
+     *  [Description]
+     *  @param jwt - 
+     *  @return T
+     */
+    public static function extract<T:Dynamic>(jwt:String):T {
+        var parts:Array<String> = jwt.split(".");
+        if(parts.length != 3) throw 'Malformed JWT!';
+        return Json.parse(base64url_decode(parts[1]).toString());
     }
 }
