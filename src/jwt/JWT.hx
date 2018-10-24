@@ -78,16 +78,15 @@ class JWT {
             };
         }
 
-        // for now
-        header.alg = JWTAlgorithm.HS256;
+        var alg:JWTAlgorithm = header.alg == null ? JWTAlgorithm.HS256 : header.alg;
 
         var h:String = Json.stringify(header);
         var p:String = Json.stringify(payload, replacer);
         var hb64:String = base64url_encode(Bytes.ofString(h));
         var pb64:String = base64url_encode(Bytes.ofString(p));
-        var sb:Bytes = switch(header.alg) {
-            case JWTAlgorithm.HS256: signature(header.alg, hb64 + "." + pb64, secret);
-            default: throw 'The ${cast(header.alg)} algorithm isn\'t supported yet!';
+        var sb:Bytes = switch(alg) {
+            case JWTAlgorithm.HS256: signature(alg, hb64 + "." + pb64, secret);
+            default: throw 'The ${cast(alg)} algorithm isn\'t supported yet!';
         }
         var s:String = base64url_encode(sb);
 

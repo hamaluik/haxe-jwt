@@ -7,10 +7,10 @@ typedef JWTHeader = {
     /**
      Signature algorithm
      */
-    var alg:JWTAlgorithm;
+    @:optional var alg:JWTAlgorithm;
 
     /**
      Token type
      */
-    var typ:JWTType;
+    @:optional var typ:JWTType;
 };
